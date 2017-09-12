@@ -50,6 +50,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator?
     var pageIndicatorHeight: CGFloat = 20
+    var bottomBarView: FolioReaderBottomBar!
+    var bottomBarHeight: CGFloat = 50
     var recentlyScrolled = false
     var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
     var recentlyScrolledTimer: Timer!
@@ -176,6 +178,17 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 view.addSubview(pageIndicatorView)
             }
         }
+        
+        // Bottom Bar
+        let frame = self.frameForBottomBar()
+        bottomBarView = FolioReaderBottomBar.init(frame: frame)
+        bottomBarView.backgroundColor = .red
+        bottomBarView.setHidden(true, animated: false)
+        
+        if let bottomBarView = bottomBarView {
+            view.addSubview(bottomBarView)
+        }
+        configureBottomBar()
 
         guard let readerContainer = readerContainer else { return }
         self.scrollScrubber = ScrollScrubber(frame: frameForScrollScrubber(), withReaderContainer: readerContainer)
@@ -219,6 +232,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     fileprivate func updateSubviewFrames() {
         self.pageIndicatorView?.frame = self.frameForPageIndicatorView()
         self.scrollScrubber?.frame = self.frameForScrollScrubber()
+        self.bottomBarView?.frame = self.frameForBottomBar()
     }
 
     fileprivate func frameForPageIndicatorView() -> CGRect {
@@ -236,6 +250,16 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let navText = folioReader.isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
+    }
+    
+    func configureBottomBar() {
+        let navBackground = folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
+        bottomBarView.backgroundColor = navBackground
+    }
+    
+    
+    fileprivate func frameForBottomBar() -> CGRect {
+        return CGRect(x: 0, y: view.frame.height - bottomBarHeight, width: view.frame.width, height: bottomBarHeight)
     }
 
     func configureNavBarButtons() {
@@ -374,6 +398,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     func showBars() {
         self.configureNavBar()
+        self.configureBottomBar()
         self.updateBarsStatus(false)
     }
 
@@ -385,6 +410,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let shouldHide = !self.navigationController!.isNavigationBarHidden
         if shouldHide == false {
             self.configureNavBar()
+            self.configureBottomBar()
         }
 
         self.updateBarsStatus(shouldHide)
@@ -403,6 +429,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             }
         })
         self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+        self.bottomBarView.setHidden(shouldHide, animated: true)
     }
 
     // MARK: UICollectionViewDataSource
