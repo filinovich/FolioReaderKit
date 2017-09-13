@@ -182,7 +182,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Bottom Bar
         let frame = self.frameForBottomBar()
         bottomBarView = FolioReaderBottomBar.init(frame: frame)
-        bottomBarView.backgroundColor = .red
+        bottomBarView.tintColor = readerConfig.tintColor
         bottomBarView.setHidden(true, animated: false)
         bottomBarView.delegate = self
         
@@ -1290,6 +1290,7 @@ extension FolioReaderCenter: FolioReaderChapterListDelegate {
 
 extension FolioReaderCenter: FolioReaderBottomBarDelegate {
     public func folioReaderBottomBar(_ bar: FolioReaderBottomBar, didSetSliderTo sliderValue: Float) {
-        self.changePageWith(page: Int(Float(totalPages)*sliderValue))
+        let pageNumber = Int(Float(totalPages)*sliderValue)
+        self.changePageWith(page: max(pageNumber, 1))
     }
 }

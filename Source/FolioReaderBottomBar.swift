@@ -18,6 +18,11 @@ open class FolioReaderBottomBar: UIView {
     var playButton = UIButton()
     var playButtonState = ButtonState.play
     var slider = UISlider()
+    override open var tintColor: UIColor! {
+        didSet {
+            slider.tintColor = tintColor
+        }
+    }
     
     var delegate: FolioReaderBottomBarDelegate?
     
