@@ -60,7 +60,7 @@ open class FolioReaderBottomBar: UIView {
         var constraints = [NSLayoutConstraint]()
         let views = ["button": playButton, "slider" : slider] as [String : Any]
         
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[slider]-30-[button]-10-|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[slider]-20-[button(40)]-10-|", options: [], metrics: nil, views: views)
         constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[button]|", options: [], metrics: nil, views: views)
         constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[slider]|", options: [], metrics: nil, views: views)
         
